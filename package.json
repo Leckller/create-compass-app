@@ -1,0 +1,12 @@
+{
+  "name": "react-uol-app",
+  "version": "1.0.0",
+  "description": "Um template para criação de um projeto baseado nos estudos da bolsa FullStack da Compasso Uol",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "Ruy",
+  "license": "ISC"
+}
