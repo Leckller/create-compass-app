@@ -3,10 +3,16 @@
   "version": "1.0.0",
   "description": "Um template para criação de um projeto baseado nos estudos da bolsa FullStack da Compasso Uol",
   "main": "index.js",
+  "bin": {
+    "criar-projeto": "./templates/index.js"
+  },
   "scripts": {
     "start": "node index.js"
   },
   "keywords": [],
   "author": "Ruy",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "ora": "^8.0.1"
+  }
 }
