@@ -1,7 +1,17 @@
 import { spawn } from "child_process";
+import path from "path";
+import fs from "fs";
+import { stdout } from "process";
 
-const ls = spawn("mkdir", ["sim"]);
+// recebe o nome passado como argumento
+const projectName = process.argv[2] || "meu-projeto-uol-compass";
+// cria o caminho para o diretorio do projeto
+const projectPath = path.join(process.cwd(), projectName);
 
-ls.stdout.on("data", (data) => {
-  console.log(`${data}`);
-});
+if (fs.existsSync(projectPath)) {
+  stdout.write(`Erro: Já existe uma pasta com o nome "${projectName}"`);
+  process.exit(1);
+} else {
+  console.log("Diretorio criado");
+  const makeDirProj = spawn("mkdir", [projectName]);
+}
