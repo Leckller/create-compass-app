@@ -1,3 +1,6 @@
+#!/usr/bin/env node
+//Tem que manter o "shebang" p ser executavel
+
 import { spawn } from "child_process";
 import path from "path";
 import fs from "fs";
@@ -11,7 +14,7 @@ const projectPath = path.join(process.cwd(), projectName);
 if (fs.existsSync(projectPath)) {
   stdout.write(`Erro: Já existe uma pasta com o nome "${projectName}"`);
   process.exit(1);
-} else {
-  console.log("Diretorio criado");
-  const makeDirProj = spawn("mkdir", [projectName]);
 }
+
+console.log("Diretorio criado");
+const makeDirProj = spawn("mkdir", [projectName]);
