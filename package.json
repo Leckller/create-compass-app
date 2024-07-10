@@ -2,17 +2,20 @@
   "name": "react-uol-app",
   "version": "1.0.0",
   "description": "Um template para criação de um projeto baseado nos estudos da bolsa FullStack da Compasso Uol",
-  "main": "index.js",
+  "main": "main.js",
   "bin": {
-    "criar-projeto": "./templates/index.js"
+    "create-uol-app": "./dist/main.js"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node ./dist/main.js",
+    "dev": "ts-node ./src/main.ts"
   },
   "keywords": [],
   "author": "Ruy",
   "license": "ISC",
-  "dependencies": {
-    "ora": "^8.0.1"
+  "devDependencies": {
+    "@types/node": "^20.14.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.3"
   }
 }
