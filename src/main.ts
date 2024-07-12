@@ -11,6 +11,7 @@ class main {
   private _options: prompts.OptionsProject = {
     framework: "Default",
     style: "Default",
+    manager: "Default",
   };
 
   constructor(
@@ -28,8 +29,34 @@ class main {
     this.fsFunctions.createRootProject(this._projectPath);
     // Configurações de usuário
     this._options.framework = await this.prompts.framework();
-    this._options.style = await this.prompts.style();
-    this.fsFunctions.copyTemplate(__dirname, this._projectPath);
+    if (this._options.framework === "Default") {
+      this.fsFunctions.copyTemplate(
+        __dirname,
+        this._projectPath,
+        this._options.framework
+      );
+    } else {
+      this._options.style = await this.prompts.style();
+      this._options.manager = await this.prompts.manager();
+      // Realizando a cópia do template
+      this.fsFunctions.copyTemplate(__dirname, this._projectPath, "Base");
+      if (this._options.style !== "Default") {
+        this.fsFunctions.copyTemplate(
+          __dirname,
+          this._projectPath,
+          this._options.style
+        );
+      }
+      if (this._options.manager !== "Default") {
+        this.fsFunctions.copyTemplate(
+          __dirname,
+          this._projectPath,
+          this._options.manager
+        );
+      }
+    }
+    // Altera o caminho atual para o diretório do novo projeto
+    this.fsFunctions.goToDir(this._projectPath);
   }
 }
 

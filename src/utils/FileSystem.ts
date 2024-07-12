@@ -3,6 +3,7 @@ import fs from "fs";
 import { fsFunctions } from "../interfaces";
 import { spawn } from "child_process";
 import { stdout } from "process";
+import copyDirectory from "../helpers/copyDirectory";
 
 export default class FileSystem extends fsFunctions.AbstractFileSystem {
   public createRootProject(projectPath: string): void {
@@ -28,14 +29,16 @@ export default class FileSystem extends fsFunctions.AbstractFileSystem {
     return projectPath;
   }
 
-  public copyTemplate(mainPath: string, projectPath: string): void {
-    const templatePath: string = path.join(mainPath, "templates");
-    fs.readdirSync(templatePath).forEach((file) => {
-      const origFilePath: string = path.join(templatePath, file);
-      const destFilePath: string = path.join(projectPath, file);
-      fs.copyFileSync(origFilePath, destFilePath);
-      // copia apenas arquivos
-    });
-    process.chdir(projectPath);
+  public copyTemplate(
+    pathToCopy: string,
+    projectPath: string,
+    template: string
+  ): void {
+    const templatePath: string = path.join(pathToCopy, "templates", template);
+    copyDirectory(templatePath, projectPath);
+  }
+
+  public goToDir(dirPath: string): void {
+    process.chdir(dirPath);
   }
 }

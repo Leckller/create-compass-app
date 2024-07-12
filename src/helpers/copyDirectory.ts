@@ -1,16 +1,19 @@
 import fs from "fs";
 import path from "path";
 
-export default function copyDirectory(mainPath: string, projectPath: string) {
-  if (!fs.existsSync(projectPath)) {
-    fs.mkdirSync(projectPath, { recursive: true });
+export default function copyDirectory(
+  pathToCopy: string,
+  pathToNewProject: string
+) {
+  if (!fs.existsSync(pathToNewProject)) {
+    fs.mkdirSync(pathToNewProject, { recursive: true });
   }
 
-  const entries = fs.readdirSync(mainPath, { withFileTypes: true });
+  const entries = fs.readdirSync(pathToCopy, { withFileTypes: true });
 
   for (let entry of entries) {
-    const origPath = path.join(mainPath, entry.name);
-    const destPath = path.join(projectPath, entry.name);
+    const origPath = path.join(pathToCopy, entry.name);
+    const destPath = path.join(pathToNewProject, entry.name);
 
     if (entry.isDirectory()) {
       copyDirectory(origPath, destPath);

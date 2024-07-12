@@ -8,5 +8,11 @@ export abstract class AbstractFileSystem {
     return "";
   }
 
-  public copyTemplate(mainPath: string, projectPath: string): void {}
+  public copyTemplate(
+    mainPath: string,
+    projectPath: string,
+    template: string
+  ): void {}
+
+  public goToDir(dirPath: string): void {}
 }
