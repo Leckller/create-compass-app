@@ -1,98 +1,97 @@
 #!/usr/bin/env node
 //Tem que manter o "shebang" p ser executavel
 
-import { spawn } from "child_process";
-import path from "path";
-import fs from "fs";
-import { stdout } from "process";
-import { input, select } from "@inquirer/prompts";
-
-type frameworks = "React" | "Default";
-type styles = "Tailwind" | "Styled-Components" | "Default";
-
-interface OptionsProject {
-  framework: frameworks;
-  style: styles;
-}
+import { prompts, fsFunctions, installer } from "./interfaces";
+import Prompts from "./utils/Prompts";
+import FsFunctions from "./utils/FileSystem";
+import Installer from "./helpers/Installer";
 
 class main {
   private _projectName = "";
-  private _options: OptionsProject = {
+  private _projectPath = "";
+  private _options: prompts.OptionsProject = {
     framework: "Default",
     style: "Default",
+    manager: "Default",
   };
-  private _projectPath = "";
 
-  constructor() {
+  constructor(
+    protected prompts: prompts.AbstractPrompts,
+    protected fsFunctions: fsFunctions.AbstractFileSystem,
+    protected installer: installer.default
+  ) {
     this.start();
   }
 
   protected async start() {
-    await this.projectName();
-    this.projectPath();
-    await this.projectOptions();
-    console.log(this);
-    // const makeDirProj = spawn("mkdir", [this._projectName]);
-  }
+    // Criação do diretório do projeto
 
-  private async projectName() {
-    // Pede o nome do projeto
-    const projectName =
-      (await input({
-        message: "Insira um nome para o projeto:",
-      })) || "project-uol-compass";
-    this._projectName = projectName;
-  }
+    this._projectName = await this.prompts.projectName();
+    if (this.fsFunctions.fileExists(this._projectName)) process.exit(1);
+    this._projectPath = this.fsFunctions.createPathProject(this._projectName);
+    this.fsFunctions.createRootProject(this._projectPath);
 
-  private async projectPath() {
-    // cria o caminho para o diretorio do projeto
-    const projectPath = path.join(process.cwd(), this._projectName);
-    //verifica se já existe um diretorio com esse nome.
-    if (fs.existsSync(projectPath)) {
-      stdout.write(
-        `Erro: Já existe uma pasta com o nome "${this._projectName}"`
+    // Configurações de usuário + cópia dos arquivos
+
+    this._options.framework = await this.prompts.framework();
+    if (this._options.framework === "Default") {
+      this.fsFunctions.copyTemplate(
+        __dirname,
+        this._projectPath,
+        this._options.framework
       );
-      process.exit(1);
+    } else {
+      this._options.style = await this.prompts.style();
+      this._options.manager = await this.prompts.manager();
+      // Realizando a cópia do template
+      this.fsFunctions.copyTemplate(__dirname, this._projectPath, "Base");
+      if (this._options.style !== "Default") {
+        this.fsFunctions.copyTemplate(
+          __dirname,
+          this._projectPath,
+          `/Others/${this._options.style}`.trim()
+        );
+      }
+      if (this._options.manager !== "Default") {
+        this.fsFunctions.copyTemplate(
+          __dirname,
+          this._projectPath,
+          `/Others/${this._options.manager}`.trim()
+        );
+      }
     }
-    this._projectPath = projectPath;
-  }
 
-  private async projectOptions() {
-    const framework: frameworks = await select({
-      message: "Qual framework você quer usar?",
-      theme: {
-        icon: { cursor: "💙" },
-      },
-      choices: [
-        {
-          name: "React",
-          value: "React",
-        },
-        {
-          name: "Default",
-          value: "Default",
-        },
-      ],
-    });
-    const style: styles = await select({
-      message: "Qual tipo de ",
-      choices: [
-        {
-          name: "Tailwind",
-          value: "Tailwind",
-        },
-        {
-          name: "Styled-Components",
-          value: "Styled-Components",
-        },
-        {
-          name: "Default",
-          value: "Default",
-        },
-      ],
-    });
-    this._options = { style, framework };
+    // Altera o caminho atual para o diretório do novo projeto
+
+    this.fsFunctions.goToDir(this._projectPath);
+
+    // Configura o package.json de acordo com as opções do usuário
+
+    switch (this._options.style) {
+      case "Tailwind":
+        this.installer.Tailwind();
+        break;
+      case "Styled-Components":
+        this.installer.StyledComponents();
+        break;
+      case "Default":
+        break;
+    }
+
+    switch (this._options.manager) {
+      case "Context-API":
+        break;
+      case "Redux":
+        this.installer.Redux();
+        break;
+      case "Default":
+        break;
+    }
   }
 }
 
-new main();
+const FS = new FsFunctions();
+const PMP = new Prompts();
+const ITL = new Installer(FS);
+
+new main(PMP, FS, ITL);
