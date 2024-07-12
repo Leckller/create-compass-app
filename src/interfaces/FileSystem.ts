@@ -7,4 +7,6 @@ export abstract class AbstractFileSystem {
   public createPathProject(dirName: string): string {
     return "";
   }
+
+  public copyTemplate(mainPath: string, projectPath: string): void {}
 }

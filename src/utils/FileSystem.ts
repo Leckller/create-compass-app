@@ -27,4 +27,15 @@ export default class FileSystem extends fsFunctions.AbstractFileSystem {
     const projectPath = path.join(process.cwd(), dirName);
     return projectPath;
   }
+
+  public copyTemplate(mainPath: string, projectPath: string): void {
+    const templatePath: string = path.join(mainPath, "templates");
+    fs.readdirSync(templatePath).forEach((file) => {
+      const origFilePath: string = path.join(templatePath, file);
+      const destFilePath: string = path.join(projectPath, file);
+      fs.copyFileSync(origFilePath, destFilePath);
+      // copia apenas arquivos
+    });
+    process.chdir(projectPath);
+  }
 }

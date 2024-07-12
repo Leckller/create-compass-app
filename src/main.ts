@@ -21,10 +21,15 @@ class main {
   }
 
   protected async start() {
+    // Criação do diretório do projeto
     this._projectName = await this.prompts.projectName();
     if (this.fsFunctions.fileExists(this._projectName)) process.exit(1);
     this._projectPath = this.fsFunctions.createPathProject(this._projectName);
     this.fsFunctions.createRootProject(this._projectPath);
+    // Configurações de usuário
+    this._options.framework = await this.prompts.framework();
+    this._options.style = await this.prompts.style();
+    this.fsFunctions.copyTemplate(__dirname, this._projectPath);
   }
 }
 
