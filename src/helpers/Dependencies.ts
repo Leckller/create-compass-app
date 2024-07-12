@@ -1,7 +1,7 @@
 import fs from "fs/promises";
-import path from "path";
 import { dependencies } from "../interfaces";
 
+// Acabei não usando isso agora, mas devo mudar a lógica para utilizar esse aqui mesmo
 export default class Dependencies {
   public async readFile(
     packagePath: string

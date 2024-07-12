@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 //Tem que manter o "shebang" p ser executavel
 
-import { prompts, fsFunctions, dependencies } from "./interfaces";
+import { prompts, fsFunctions, installer } from "./interfaces";
 import Prompts from "./utils/Prompts";
 import FsFunctions from "./utils/FileSystem";
-import Dependencies from "./helpers/Dependencies";
+import Installer from "./helpers/Installer";
 
 class main {
   private _projectName = "";
@@ -18,7 +18,7 @@ class main {
   constructor(
     protected prompts: prompts.AbstractPrompts,
     protected fsFunctions: fsFunctions.AbstractFileSystem,
-    protected deps: dependencies.AbstractDependencies
+    protected installer: installer.default
   ) {
     this.start();
   }
@@ -61,14 +61,37 @@ class main {
       }
     }
 
-    // Configura o package.json de acordo com as opções do usuário
-
-    // this.deps.addDependencies()
-
     // Altera o caminho atual para o diretório do novo projeto
 
     this.fsFunctions.goToDir(this._projectPath);
+
+    // Configura o package.json de acordo com as opções do usuário
+
+    switch (this._options.style) {
+      case "Tailwind":
+        this.installer.Tailwind();
+        break;
+      case "Styled-Components":
+        this.installer.StyledComponents();
+        break;
+      case "Default":
+        break;
+    }
+
+    switch (this._options.manager) {
+      case "Context-API":
+        break;
+      case "Redux":
+        this.installer.Redux();
+        break;
+      case "Default":
+        break;
+    }
   }
 }
 
-new main(new Prompts(), new FsFunctions(), new Dependencies());
+const FS = new FsFunctions();
+const PMP = new Prompts();
+const ITL = new Installer(FS);
+
+new main(PMP, FS, ITL);

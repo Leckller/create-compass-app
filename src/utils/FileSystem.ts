@@ -42,4 +42,21 @@ export default class FileSystem extends fsFunctions.AbstractFileSystem {
   public goToDir(dirPath: string): void {
     process.chdir(dirPath);
   }
+
+  public installDependencies(
+    isDevDependency: boolean,
+    npmPackage: string | string[]
+  ): void {
+    // instalador de pacotes
+    if (Array.isArray(npmPackage)) {
+      for (let pkg of npmPackage) {
+        this.installDependencies(isDevDependency, pkg);
+      }
+    } else {
+      const options: string[] = isDevDependency
+        ? ["-D", npmPackage]
+        : [npmPackage];
+      spawn("npm", [...options]);
+    }
+  }
 }
