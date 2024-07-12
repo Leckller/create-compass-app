@@ -1,5 +1,6 @@
 import path from "path";
 import fs from "fs";
+import fsa from "fs/promises";
 import { fsFunctions } from "../interfaces";
 import { spawn } from "child_process";
 import { stdout } from "process";

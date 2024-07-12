@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 //Tem que manter o "shebang" p ser executavel
 
-import { prompts, fsFunctions } from "./interfaces";
+import { prompts, fsFunctions, dependencies } from "./interfaces";
 import Prompts from "./utils/Prompts";
 import FsFunctions from "./utils/FileSystem";
+import Dependencies from "./helpers/Dependencies";
 
 class main {
   private _projectName = "";
@@ -16,18 +17,22 @@ class main {
 
   constructor(
     protected prompts: prompts.AbstractPrompts,
-    protected fsFunctions: fsFunctions.AbstractFileSystem
+    protected fsFunctions: fsFunctions.AbstractFileSystem,
+    protected deps: dependencies.AbstractDependencies
   ) {
     this.start();
   }
 
   protected async start() {
     // Criação do diretório do projeto
+
     this._projectName = await this.prompts.projectName();
     if (this.fsFunctions.fileExists(this._projectName)) process.exit(1);
     this._projectPath = this.fsFunctions.createPathProject(this._projectName);
     this.fsFunctions.createRootProject(this._projectPath);
-    // Configurações de usuário
+
+    // Configurações de usuário + cópia dos arquivos
+
     this._options.framework = await this.prompts.framework();
     if (this._options.framework === "Default") {
       this.fsFunctions.copyTemplate(
@@ -44,20 +49,26 @@ class main {
         this.fsFunctions.copyTemplate(
           __dirname,
           this._projectPath,
-          this._options.style
+          `/Others/${this._options.style}`.trim()
         );
       }
       if (this._options.manager !== "Default") {
         this.fsFunctions.copyTemplate(
           __dirname,
           this._projectPath,
-          this._options.manager
+          `/Others/${this._options.manager}`.trim()
         );
       }
     }
+
+    // Configura o package.json de acordo com as opções do usuário
+
+    // this.deps.addDependencies()
+
     // Altera o caminho atual para o diretório do novo projeto
+
     this.fsFunctions.goToDir(this._projectPath);
   }
 }
 
-new main(new Prompts(), new FsFunctions());
+new main(new Prompts(), new FsFunctions(), new Dependencies());
