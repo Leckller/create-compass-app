@@ -7,17 +7,17 @@ export default class Installer extends AbstractInstaller {
   }
 
   public Tailwind() {
-    const devDependencies = ["tailwindcss", "postcss", "autoprefixer"];
-    this.fsFunctions.installDependencies(true, devDependencies);
+    const devDependencies = "-D tailwindcss postcss autoprefixer";
+    this.fsFunctions.installDependencies(devDependencies);
   }
 
   public Redux() {
-    const Dependencies = ["@reduxjs/toolkit", "react-redux"];
-    this.fsFunctions.installDependencies(false, Dependencies);
+    const Dependencies = "@reduxjs/toolkit react-redux";
+    this.fsFunctions.installDependencies(Dependencies);
   }
 
   public StyledComponents() {
-    const Dependencies = ["styled-components"];
-    this.fsFunctions.installDependencies(false, Dependencies);
+    const Dependencies = "styled-components";
+    this.fsFunctions.installDependencies(Dependencies);
   }
 }

@@ -2,7 +2,7 @@ import path from "path";
 import fs from "fs";
 import fsa from "fs/promises";
 import { fsFunctions } from "../interfaces";
-import { spawn } from "child_process";
+import { execSync, spawn } from "child_process";
 import { stdout } from "process";
 import copyDirectory from "../helpers/copyDirectory";
 
@@ -43,20 +43,8 @@ export default class FileSystem extends fsFunctions.AbstractFileSystem {
     process.chdir(dirPath);
   }
 
-  public installDependencies(
-    isDevDependency: boolean,
-    npmPackage: string | string[]
-  ): void {
-    // instalador de pacotes
-    if (Array.isArray(npmPackage)) {
-      for (let pkg of npmPackage) {
-        this.installDependencies(isDevDependency, pkg);
-      }
-    } else {
-      const options: string[] = isDevDependency
-        ? ["-D", npmPackage]
-        : [npmPackage];
-      spawn("npm", [...options]);
-    }
+  public installDependencies(npmPackage: string): void {
+    // instalador
+    execSync(`npm install ${npmPackage}`);
   }
 }
