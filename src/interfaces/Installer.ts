@@ -6,4 +6,6 @@ export default abstract class AbstractInstaller {
   public Redux(): void {}
 
   public StyledComponents(): void {}
+
+  public npmInstall(): void {}
 }

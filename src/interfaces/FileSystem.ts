@@ -16,5 +16,5 @@ export abstract class AbstractFileSystem {
 
   public goToDir(dirPath: string): void {}
 
-  public installDependencies(npmPackage: string): void {}
+  public installDependencies(npmPackage?: string): void {}
 }

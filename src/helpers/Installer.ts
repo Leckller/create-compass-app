@@ -20,4 +20,8 @@ export default class Installer extends AbstractInstaller {
     const Dependencies = "styled-components";
     this.fsFunctions.installDependencies(Dependencies);
   }
+
+  public npmInstall(): void {
+    this.fsFunctions.installDependencies();
+  }
 }

@@ -16,11 +16,17 @@ export default class Prompts extends prompts.AbstractPrompts {
       choices: [
         {
           name: "Default",
-          value: "Default",
+          value: {
+            type: "Default",
+            path: "/Base",
+          },
         },
         {
           name: "React",
-          value: "React",
+          value: {
+            type: "React",
+            path: "/Others/React",
+          },
         },
       ],
     });
@@ -74,6 +80,23 @@ export default class Prompts extends prompts.AbstractPrompts {
       ],
     });
 
+    return userInput;
+  }
+
+  public async npmInstall(): Promise<boolean> {
+    const userInput: boolean = await select({
+      message: "Deseja instalar as dependências de projeto?",
+      choices: [
+        {
+          name: "Sim",
+          value: true,
+        },
+        {
+          name: "Não",
+          value: false,
+        },
+      ],
+    });
     return userInput;
   }
 }

@@ -10,7 +10,7 @@ class main {
   private _projectName = "";
   private _projectPath = "";
   private _options: prompts.OptionsProject = {
-    framework: "Default",
+    framework: { path: "", type: "Default" },
     style: "Default",
     manager: "Default",
   };
@@ -34,17 +34,24 @@ class main {
     // Configurações de usuário + cópia dos arquivos
 
     this._options.framework = await this.prompts.framework();
-    if (this._options.framework === "Default") {
-      this.fsFunctions.copyTemplate(
-        __dirname,
-        this._projectPath,
-        this._options.framework
-      );
+    this.fsFunctions.copyTemplate(
+      __dirname,
+      this._projectPath,
+      this._options.framework.path
+    );
+
+    // Altera o caminho atual para o diretório do novo projeto
+    this.fsFunctions.goToDir(this._projectPath);
+
+    if (this._options.framework.type === "Default") {
+      const userAwnser = await this.prompts.npmInstall();
+      if (userAwnser) {
+        this.installer.npmInstall();
+      }
     } else {
       this._options.style = await this.prompts.style();
       this._options.manager = await this.prompts.manager();
       // Realizando a cópia do template
-      this.fsFunctions.copyTemplate(__dirname, this._projectPath, "Base");
       if (this._options.style !== "Default") {
         this.fsFunctions.copyTemplate(
           __dirname,
@@ -61,32 +68,28 @@ class main {
       }
     }
 
-    // Altera o caminho atual para o diretório do novo projeto
-
-    this.fsFunctions.goToDir(this._projectPath);
-
     // Configura o package.json de acordo com as opções do usuário
 
-    switch (this._options.style) {
-      case "Tailwind":
-        this.installer.Tailwind();
-        break;
-      case "Styled-Components":
-        this.installer.StyledComponents();
-        break;
-      case "Default":
-        break;
-    }
+    // switch (this._options.style) {
+    //   case "Tailwind":
+    //     this.installer.Tailwind();
+    //     break;
+    //   case "Styled-Components":
+    //     this.installer.StyledComponents();
+    //     break;
+    //   case "Default":
+    //     break;
+    // }
 
-    switch (this._options.manager) {
-      case "Context-API":
-        break;
-      case "Redux":
-        this.installer.Redux();
-        break;
-      case "Default":
-        break;
-    }
+    // switch (this._options.manager) {
+    //   case "Context-API":
+    //     break;
+    //   case "Redux":
+    //     this.installer.Redux();
+    //     break;
+    //   case "Default":
+    //     break;
+    // }
   }
 }
 

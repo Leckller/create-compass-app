@@ -1,4 +1,4 @@
-export type frameworks = "React" | "Default";
+export type frameworks = { type: "React" | "Default"; path: string };
 export type styles = "Tailwind" | "Styled-Components" | "Default";
 export type stateManager = "Context-API" | "Redux" | "Default";
 
@@ -15,9 +15,7 @@ export abstract class AbstractPrompts {
     });
   }
   framework(): Promise<frameworks> {
-    return new Promise((resolve, _reject) => {
-      resolve("React");
-    });
+    return new Promise((resolve, _reject) => {});
   }
   style(): Promise<styles> {
     return new Promise((resolve, _reject) => {
@@ -29,5 +27,9 @@ export abstract class AbstractPrompts {
     return new Promise((resolve, _reject) => {
       resolve("Context-API");
     });
+  }
+
+  npmInstall(): Promise<boolean> {
+    return new Promise(() => {});
   }
 }

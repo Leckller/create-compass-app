@@ -11,7 +11,7 @@ export default class Dependencies {
     return json;
   }
 
-  public async writeFile(
+  public async addDependency(
     isDevDep: boolean,
     newDep: Partial<dependencies.dependencies>,
     pathFile: string
@@ -34,21 +34,5 @@ export default class Dependencies {
         };
     await fs.writeFile(pathFile, JSON.stringify({ ...addDep }));
     return addDep;
-  }
-
-  public async addDependencies(
-    isDevDep: boolean,
-    dependency:
-      | Partial<dependencies.dependencies>
-      | Partial<dependencies.dependencies>[],
-    projectPath: string
-  ) {
-    if (Array.isArray(dependency)) {
-      for (let dep of dependency) {
-        this.addDependencies(isDevDep, dep, projectPath);
-      }
-    } else {
-      this.writeFile(isDevDep, dependency, projectPath);
-    }
   }
 }

@@ -43,8 +43,12 @@ export default class FileSystem extends fsFunctions.AbstractFileSystem {
     process.chdir(dirPath);
   }
 
-  public installDependencies(npmPackage: string): void {
+  public installDependencies(npmPackage?: string): void {
     // instalador
+    if (!npmPackage) {
+      execSync(`npm install`);
+      return;
+    }
     execSync(`npm install ${npmPackage}`);
   }
 }

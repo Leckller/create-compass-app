@@ -1,9 +1,8 @@
 export interface dependencies {
-  redux: string[];
-  tailwind: string[];
-  react: string[];
-  styledComponents: string[];
+  [prop: string]: string;
 }
+
+export type constDeps = [dependencies, dependencies];
 
 export interface PackageBase {
   name: string;
@@ -20,15 +19,9 @@ export abstract class AbstractDependencies {
   public async readFile(packagePath: string): Promise<PackageBase> {
     return new Promise((res, rej) => {});
   }
-  public async writeFile(
+  public async addDependency(
     isDevDep: boolean,
     newDep: Partial<dependencies>,
     pathFile: string
   ): Promise<any> {}
-
-  public async addDependencies(
-    isDevDep: boolean,
-    dependency: Partial<dependencies> | Partial<dependencies>[],
-    projectPath: string
-  ) {}
 }
