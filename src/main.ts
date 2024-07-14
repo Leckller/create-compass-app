@@ -4,7 +4,6 @@
 import { prompts, fsFunctions, installer } from "./interfaces";
 import Prompts from "./utils/Prompts";
 import FsFunctions from "./utils/FileSystem";
-import Installer from "./helpers/Installer";
 
 class main {
   private _projectName = "";
@@ -17,8 +16,7 @@ class main {
 
   constructor(
     protected prompts: prompts.AbstractPrompts,
-    protected fsFunctions: fsFunctions.AbstractFileSystem,
-    protected installer: installer.default
+    protected fsFunctions: fsFunctions.AbstractFileSystem
   ) {
     this.start();
   }
@@ -46,7 +44,7 @@ class main {
     if (this._options.framework.type === "Default") {
       const userAwnser = await this.prompts.npmInstall();
       if (userAwnser) {
-        this.installer.npmInstall();
+        this.fsFunctions.installDependencies();
       }
     } else {
       this._options.style = await this.prompts.style();
@@ -95,6 +93,5 @@ class main {
 
 const FS = new FsFunctions();
 const PMP = new Prompts();
-const ITL = new Installer(FS);
 
-new main(PMP, FS, ITL);
+new main(PMP, FS);
