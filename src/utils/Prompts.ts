@@ -5,8 +5,9 @@ export default class Prompts extends prompts.AbstractPrompts {
   public async projectName(): Promise<string> {
     const userInput: string =
       (await input({
+        default: "project-compass-uol",
         message: "Bem-vindo! Insira um nome para projeto:",
-      })) || "project-uol-compass";
+      }));
     return userInput.trim();
   }
 
@@ -20,6 +21,7 @@ export default class Prompts extends prompts.AbstractPrompts {
             type: "Default",
             path: "/Base",
           },
+          description: "Apenas o bom e velho typescript"
         },
         {
           name: "React",
@@ -27,6 +29,7 @@ export default class Prompts extends prompts.AbstractPrompts {
             type: "React",
             path: "/Others/React",
           },
+          description: "Mark Zuckerberg ficaria orgulhoso de sua escolha"
         },
       ],
     });
@@ -35,18 +38,18 @@ export default class Prompts extends prompts.AbstractPrompts {
 
   public async style(): Promise<prompts.styles> {
     const userInput: prompts.styles = await select({
-      message: "Escolha um framework de estilização?",
+      message: "Escolha um framework de estilização:",
       choices: [
         {
           name: "Tailwind",
           value: "Tailwind",
           description: "Estilizações mais rápidas!",
         },
-        {
-          name: "Styled-Components",
-          value: "Styled-Components",
-          description: "Estilizações por componentes!",
-        },
+        // {
+        //   name: "Styled-Components",
+        //   value: "Styled-Components",
+        //   description: "Estilizações por componentes!",
+        // },
         {
           name: "Default",
           value: "Default",
@@ -60,18 +63,18 @@ export default class Prompts extends prompts.AbstractPrompts {
 
   public async manager(): Promise<prompts.stateManager> {
     const userInput: prompts.stateManager = await select({
-      message: "Escolha um framework para gerenciar o estado da aplicação",
+      message: "Escolha um framework para gerenciar o estado da aplicação:",
       choices: [
         {
           name: "Redux",
           value: "Redux",
           description: "Mais prático e moderno!",
         },
-        {
-          name: "Context-API",
-          value: "Context-API",
-          description: "Solução nativa do react para gerenciar estados!",
-        },
+        // {
+        //   name: "Context-API",
+        //   value: "Context-API",
+        //   description: "Solução nativa do react para gerenciar estados!",
+        // },
         {
           name: "Default",
           value: "Default",
