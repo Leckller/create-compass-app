@@ -7,11 +7,12 @@ import FsFunctions from "./utils/FileSystem";
 import Dependencies from "./helpers/Dependencies";
 import { AbstractDependencies } from "./interfaces/Dependencies";
 import * as allDeps from "./utils/Dependencies";
-import { stderr } from "process";
+import path from "path";
 
 class main {
   private _projectName = "";
   private _projectPath = "";
+  private _templatePath = path.join(process.cwd(), "templates");
   private _options: prompts.OptionsProject = {
     framework: { path: "", type: "Default" },
     style: "Default",
@@ -32,23 +33,23 @@ class main {
       // Criação do diretório do projeto
       await this.defineProj();
 
-    // Configurações de usuário + cópia dos arquivos
-    this._options.framework = await this.prompts.framework();
+      // Configurações de usuário + cópia dos arquivos
+      this._options.framework = await this.prompts.framework();
 
-    // Copia o arquivo base
-    this.copyBaseTemplate();
+      // Copia o arquivo base
+      this.copyBaseTemplate();
 
-    // Altera o caminho atual para o diretório do novo projeto
-    this.fsFunctions.goToDir(this._projectName);
-    
-    // Realizando a cópia do template
-    await this.askOptionsAndCopy();
-    
-    // Configura o package.json de acordo com as opções do usuário
-    await this.addAndInstDeps();
-    // const pathPackage = this._projectPath+"/package.json";
+      // Altera o caminho atual para o diretório do novo projeto
+      // this.fsFunctions.goToDir(this._projectName);
 
-    // this.deps.addDependency(false, allDeps.ReactDeps[0], pathPackage);
+      // Realizando a cópia do template
+      await this.askOptionsAndCopy();
+
+      // Configura o package.json de acordo com as opções do usuário
+      await this.addAndInstDeps();
+      // const pathPackage = this._projectPath+"/package.json";
+
+      // this.deps.addDependency(false, allDeps.ReactDeps[0], pathPackage);
     } catch (err) {
       console.log(err)
     }
@@ -73,14 +74,14 @@ class main {
 
       if (this._options.style !== "Default") {
         this.fsFunctions.copyTemplate(
-          __dirname,
+          this._templatePath,
           this._projectPath,
           `/Others/${this._options.style}`.trim()
         );
       }
       if (this._options.manager !== "Default") {
         this.fsFunctions.copyTemplate(
-          __dirname,
+          this._templatePath,
           this._projectPath,
           `/Others/${this._options.manager}`.trim()
         );
@@ -89,28 +90,28 @@ class main {
   }
 
   private copyBaseTemplate() {
-    if (this._options.framework.type === 'Default'){
+    if (this._options.framework.type === 'Default') {
       this.fsFunctions.copyTemplate(
-        __dirname,
+        this._templatePath,
         this._projectPath,
-        this._options.framework.path 
+        this._options.framework.path
       );
     } else {
       this.fsFunctions.copyTemplate(
-        __dirname,
+        this._templatePath,
         this._projectPath,
-        "/Base" 
+        "/Base"
       );
       this.fsFunctions.copyTemplate(
-        __dirname,
+        this._templatePath,
         this._projectPath,
-        this._options.framework.path 
+        this._options.framework.path
       );
     }
   }
 
   private async addAndInstDeps() {
-    const pathPackage = this._projectPath+"/package.json";
+    const pathPackage = this._projectPath + "/package.json";
 
     await this.deps.addDependency(false, allDeps.ReactDeps[0], pathPackage);
     await this.deps.addDependency(true, allDeps.ReactDeps[1], pathPackage);

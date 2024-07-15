@@ -6,7 +6,6 @@ export default class Dependencies {
   public async readFile(
     packagePath: string
   ): Promise<dependencies.PackageBase> {
-    console.log(packagePath)
     const data = await fs.readFile(packagePath);
     const json = await JSON.parse(data.toString());
     return json;
@@ -18,7 +17,7 @@ export default class Dependencies {
     pathFile: string
   ): Promise<any> {
     const data = await this.readFile(pathFile);
-    if(isDevDep) {
+    if (isDevDep) {
       data.devDependencies = {
         ...data.devDependencies,
         ...newDep

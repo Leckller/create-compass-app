@@ -32,7 +32,7 @@ export default class FileSystem extends fsFunctions.AbstractFileSystem {
     projectPath: string,
     template: string
   ): void {
-    const templatePath: string = path.join(pathToCopy, "templates", template);
+    const templatePath: string = path.join(pathToCopy, template);
     copyDirectory(templatePath, projectPath);
   }
 
