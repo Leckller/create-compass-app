@@ -36,8 +36,13 @@ export default class FileSystem extends fsFunctions.AbstractFileSystem {
     copyDirectory(templatePath, projectPath);
   }
 
-  public goToDir(dirName: string): void {
-    execSync(`cd ${dirName}`)
+  public goToDir(dirPath: string): void {
+    try {
+      process.chdir(dirPath)
+      console.log(`Diretório de trabalho atual: ${process.cwd()}`)
+    } catch (err) {
+      console.log(`Erro ao alterar o diretório: ${(err as Error).message}`)
+    }
   }
 
   public installDependencies(npmPackage?: string): void {

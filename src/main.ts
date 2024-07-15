@@ -37,19 +37,8 @@ class main {
       this._options.framework = await this.prompts.framework();
 
       // Copia o arquivo base
-      this.copyBaseTemplate();
+      await this.copyBaseTemplate();
 
-      // Altera o caminho atual para o diretório do novo projeto
-      // this.fsFunctions.goToDir(this._projectName);
-
-      // Realizando a cópia do template
-      await this.askOptionsAndCopy();
-
-      // Configura o package.json de acordo com as opções do usuário
-      await this.addAndInstDeps();
-      // const pathPackage = this._projectPath+"/package.json";
-
-      // this.deps.addDependency(false, allDeps.ReactDeps[0], pathPackage);
     } catch (err) {
       console.log(err)
     }
@@ -89,7 +78,7 @@ class main {
     }
   }
 
-  private copyBaseTemplate() {
+  private async copyBaseTemplate() {
     if (this._options.framework.type === 'Default') {
       this.fsFunctions.copyTemplate(
         this._templatePath,
@@ -107,14 +96,22 @@ class main {
         this._projectPath,
         this._options.framework.path
       );
+
+      // Realizando a cópia do template
+      await this.askOptionsAndCopy();
+
+      // Configura o package.json de acordo com as opções do usuário
     }
+    await this.addAndInstDeps();
   }
 
   private async addAndInstDeps() {
     const pathPackage = this._projectPath + "/package.json";
 
-    await this.deps.addDependency(false, allDeps.ReactDeps[0], pathPackage);
-    await this.deps.addDependency(true, allDeps.ReactDeps[1], pathPackage);
+    if (this._options.framework.type === 'React') {
+      await this.deps.addDependency(false, allDeps.ReactDeps[0], pathPackage);
+      await this.deps.addDependency(true, allDeps.ReactDeps[1], pathPackage);
+    }
 
     switch (this._options.style) {
       case "Tailwind":
@@ -139,14 +136,31 @@ class main {
         break;
     }
 
+    // Altera o caminho atual para o diretório do novo projeto
+    this.fsFunctions.goToDir(this._projectPath);
+    // Pergunta ao usuário se deseja instalar as dependencias
     await this.UserAnswerToInstallDeps();
   }
 
   private async UserAnswerToInstallDeps() {
     const userAwnser = await this.prompts.npmInstall();
     if (userAwnser) {
-      this.fsFunctions.installDependencies();
+      try {
+        console.log("Instalando dependências... talvez demore um pouquinho")
+        this.fsFunctions.installDependencies();
+      } catch {
+        console.log("Ops... parece que ocorreu algum erro durante a instalação")
+      }
     }
+    const runStart = this._options.framework.type === "Default" ? "" : "$ npm run vite"
+    console.log(`
+      Tudo pronto!\n
+      Para começar siga os seguintes passos:\n
+      $ cd ${this._projectName}\n
+      ${userAwnser ? runStart : `$ npm install\n
+      ${runStart}`}
+      `)
+
   }
 }
 
