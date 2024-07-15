@@ -1,9 +1,9 @@
-import React from 'react'
-
 function Home() {
   return (
-    <div>Home</div>
-  )
+    <header>
+      <h1>Bem vindo, Compasser!!</h1>
+    </header>
+  );
 }
 
-export default Home
+export default Home;
