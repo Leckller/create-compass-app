@@ -1,0 +1,16 @@
+{
+  "name": "meu-projeto",
+  "version": "1.0.0",
+  "main": "./dist/main.js",
+  "scripts": {
+    "start": "node .",
+    "vite": "vite",
+    "dev": "ts-node ./src/main.ts",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "build": "tsc"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@trybe/eslint-config-frontend": "^1.11.4"
+  }
+}

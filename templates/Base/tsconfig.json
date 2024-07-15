@@ -2,12 +2,7 @@
   "compilerOptions": {
     "target": "ES6",
     "module": "commonjs",
-    "lib": [
-      "DOM",
-      "ES2016",
-      "DOM.Iterable",
-      "ScriptHost"
-    ],
+    "lib": ["DOM", "ES2016", "DOM.Iterable", "ScriptHost"],
     "rootDir": "./src",
     "outDir": "./dist",
     "esModuleInterop": true,
@@ -17,11 +12,6 @@
     "experimentalDecorators": true,
     "removeComments": true
   },
-  "include": [
-    "./src/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "src/templates/**/*"
-  ]
+  "include": ["./src/*"],
+  "exclude": ["node_modules"]
 }
