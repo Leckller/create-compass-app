@@ -1,0 +1,27 @@
+body {
+  overflow: hidden;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+label input {
+  width: 80%;
+  border: solid black 2px;
+  border-radius: 6px;
+}
+
+label h3 {
+  width: 80%;
+  text-align: start;
+  font-size: larger;
+}
+
+.transitionClean {
+  transition-property: all;
+  transition-duration: "300ms"
+}

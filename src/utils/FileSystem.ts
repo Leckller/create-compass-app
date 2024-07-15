@@ -1,9 +1,7 @@
 import path from "path";
 import fs from "fs";
-import fsa from "fs/promises";
 import { fsFunctions } from "../interfaces";
 import { execSync, spawn } from "child_process";
-import { stdout } from "process";
 import copyDirectory from "../helpers/copyDirectory";
 
 export default class FileSystem extends fsFunctions.AbstractFileSystem {
@@ -19,7 +17,6 @@ export default class FileSystem extends fsFunctions.AbstractFileSystem {
     */
     const verify = fs.existsSync(this.createPathProject(dirName));
     if (verify) {
-      stdout.write(`Erro: Já existe uma pasta com o nome ${dirName}`);
       return true;
     }
     return verify;
@@ -39,8 +36,8 @@ export default class FileSystem extends fsFunctions.AbstractFileSystem {
     copyDirectory(templatePath, projectPath);
   }
 
-  public goToDir(dirPath: string): void {
-    process.chdir(dirPath);
+  public goToDir(dirName: string): void {
+    execSync(`cd ${dirName}`)
   }
 
   public installDependencies(npmPackage?: string): void {

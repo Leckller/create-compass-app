@@ -6,33 +6,30 @@ export default class Dependencies {
   public async readFile(
     packagePath: string
   ): Promise<dependencies.PackageBase> {
+    console.log(packagePath)
     const data = await fs.readFile(packagePath);
-    const json = JSON.parse(data.toString());
+    const json = await JSON.parse(data.toString());
     return json;
   }
 
   public async addDependency(
     isDevDep: boolean,
-    newDep: Partial<dependencies.dependencies>,
+    newDep: dependencies.dependencies,
     pathFile: string
   ): Promise<any> {
     const data = await this.readFile(pathFile);
-    const addDep = isDevDep
-      ? {
-          ...data,
-          devDependencies: {
-            ...data.devDependencies,
-            ...newDep,
-          },
-        }
-      : {
-          ...data,
-          dependencies: {
-            ...data.dependencies,
-            ...newDep,
-          },
-        };
-    await fs.writeFile(pathFile, JSON.stringify({ ...addDep }));
-    return addDep;
+    if(isDevDep) {
+      data.devDependencies = {
+        ...data.devDependencies,
+        ...newDep
+      }
+    } else {
+      data.dependencies = {
+        ...data.dependencies,
+        ...newDep
+      }
+    }
+    await fs.writeFile(pathFile, JSON.stringify(data));
+    return data;
   }
 }

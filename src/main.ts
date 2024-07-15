@@ -7,6 +7,7 @@ import FsFunctions from "./utils/FileSystem";
 import Dependencies from "./helpers/Dependencies";
 import { AbstractDependencies } from "./interfaces/Dependencies";
 import * as allDeps from "./utils/Dependencies";
+import { stderr } from "process";
 
 class main {
   private _projectName = "";
@@ -26,8 +27,10 @@ class main {
   }
 
   protected async start() {
-    // Criação do diretório do projeto
-    await this.defineProj();
+    try {
+
+      // Criação do diretório do projeto
+      await this.defineProj();
 
     // Configurações de usuário + cópia dos arquivos
     this._options.framework = await this.prompts.framework();
@@ -36,18 +39,27 @@ class main {
     this.copyBaseTemplate();
 
     // Altera o caminho atual para o diretório do novo projeto
-    this.fsFunctions.goToDir(this._projectPath);
-
+    this.fsFunctions.goToDir(this._projectName);
+    
     // Realizando a cópia do template
     await this.askOptionsAndCopy();
-
+    
     // Configura o package.json de acordo com as opções do usuário
-    this.addAndInstDeps();
+    await this.addAndInstDeps();
+    // const pathPackage = this._projectPath+"/package.json";
+
+    // this.deps.addDependency(false, allDeps.ReactDeps[0], pathPackage);
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   private async defineProj() {
     this._projectName = await this.prompts.projectName();
-    if (this.fsFunctions.fileExists(this._projectName)) process.exit(1);
+    if (this.fsFunctions.fileExists(this._projectName)) {
+      console.log(`Erro: Já existe uma pasta com o nome ${this._projectName}`);
+      process.exit(1);
+    };
     this._projectPath = this.fsFunctions.createPathProject(this._projectName);
     this.fsFunctions.createRootProject(this._projectPath);
   }
@@ -77,18 +89,36 @@ class main {
   }
 
   private copyBaseTemplate() {
-    this.fsFunctions.copyTemplate(
-      __dirname,
-      this._projectPath,
-      this._options.framework.path
-    );
+    if (this._options.framework.type === 'Default'){
+      this.fsFunctions.copyTemplate(
+        __dirname,
+        this._projectPath,
+        this._options.framework.path 
+      );
+    } else {
+      this.fsFunctions.copyTemplate(
+        __dirname,
+        this._projectPath,
+        "/Base" 
+      );
+      this.fsFunctions.copyTemplate(
+        __dirname,
+        this._projectPath,
+        this._options.framework.path 
+      );
+    }
   }
 
   private async addAndInstDeps() {
+    const pathPackage = this._projectPath+"/package.json";
+
+    await this.deps.addDependency(false, allDeps.ReactDeps[0], pathPackage);
+    await this.deps.addDependency(true, allDeps.ReactDeps[1], pathPackage);
+
     switch (this._options.style) {
       case "Tailwind":
         const { TailwindDeps } = allDeps;
-        this.deps.addDependency(true, TailwindDeps[1], this._projectPath);
+        await this.deps.addDependency(true, TailwindDeps[1], pathPackage);
         break;
       case "Styled-Components":
         this.fsFunctions.installDependencies();
@@ -102,7 +132,7 @@ class main {
         break;
       case "Redux":
         const { ReduxKitDeps } = allDeps;
-        this.deps.addDependency(true, ReduxKitDeps[0], this._projectPath);
+        await this.deps.addDependency(false, ReduxKitDeps[0], pathPackage);
         break;
       case "Default":
         break;

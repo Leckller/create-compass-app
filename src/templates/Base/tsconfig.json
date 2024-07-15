@@ -12,6 +12,6 @@
     "experimentalDecorators": true,
     "removeComments": true
   },
-  "include": ["./src/*", "src/templates"],
+  "include": ["./src/*"],
   "exclude": ["node_modules"]
 }
