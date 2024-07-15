@@ -12,7 +12,7 @@ import path from "path";
 class main {
   private _projectName = "";
   private _projectPath = "";
-  private _templatePath = path.join(process.cwd(), "templates");
+  private _templatePath = path.join(__dirname, "templates");
   private _options: prompts.OptionsProject = {
     framework: { path: "", type: "Default" },
     style: "Default",
