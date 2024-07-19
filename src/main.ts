@@ -96,10 +96,10 @@ class main {
         this._projectPath,
         this._options.framework.path
       );
-
-      // Realizando a cópia do template
-      await this.askOptionsAndCopy();
-
+      if (this._options.framework.type !== "WebPack") {
+        // Realizando a cópia do template
+        await this.askOptionsAndCopy();
+      }
       // Configura o package.json de acordo com as opções do usuário
     }
     await this.addAndInstDeps();
@@ -108,9 +108,15 @@ class main {
   private async addAndInstDeps() {
     const pathPackage = this._projectPath + "/package.json";
 
-    if (this._options.framework.type === 'React') {
-      await this.deps.addDependency(false, allDeps.ReactDeps[0], pathPackage);
-      await this.deps.addDependency(true, allDeps.ReactDeps[1], pathPackage);
+    switch (this._options.framework.type) {
+      case "React":
+        await this.deps.addDependency(true, allDeps.ReactDeps[1], pathPackage);
+        await this.deps.addDependency(false, allDeps.ReactDeps[0], pathPackage);
+        break
+      case "WebPack":
+        await this.deps.addDependency(true, allDeps.WebPackDeps[1], pathPackage);
+        await this.deps.setScripts(true, allDeps.WebPackDeps[2], pathPackage);
+        break
     }
 
     switch (this._options.style) {

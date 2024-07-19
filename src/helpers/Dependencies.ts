@@ -31,4 +31,20 @@ export default class Dependencies {
     await fs.writeFile(pathFile, JSON.stringify(data));
     return data;
   }
+
+  public async setScripts(clearScripts: boolean, scripts: object, pathFile: string) {
+    const data = await this.readFile(pathFile);
+    if (clearScripts) {
+      data.scripts = {
+        ...scripts
+      }
+    } else {
+      data.scripts = {
+        ...data.scripts,
+        ...scripts
+      }
+    }
+    await fs.writeFile(pathFile, JSON.stringify(data));
+    return data;
+  }
 }
