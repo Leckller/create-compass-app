@@ -24,7 +24,15 @@ export default class Prompts extends prompts.AbstractPrompts {
           description: "Apenas o bom e velho typescript"
         },
         {
-          name: "React",
+          name: "WebPack",
+          value: {
+            type: "WebPack",
+            path: "/Others/WebPack",
+          },
+          description: "Empacotador de módulos para typescript"
+        },
+        {
+          name: "React + Vite",
           value: {
             type: "React",
             path: "/Others/React",

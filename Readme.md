@@ -22,6 +22,7 @@
     <ul>
       <li>Default (TypeScript): Um projeto simples com TypeScript.</li> 
       <li>React: Um projeto configurado com React.</li>
+      <li>WebPack: Um projeto configurado com WebPack + Typescript.</li>
     </ul>
   </li>
 
