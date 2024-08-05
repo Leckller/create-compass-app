@@ -16,15 +16,8 @@ export interface PackageBase {
 }
 
 export abstract class AbstractDependencies {
-  public async readFile(packagePath: string): Promise<PackageBase> {
+  public async readFile(packagePath: string): Promise<any> {
     return new Promise((res, rej) => { });
   }
-  public async addDependency(
-    isDevDep: boolean,
-    newDep: Partial<dependencies>,
-    pathFile: string
-  ): Promise<any> { }
-
-  public async setScripts(clearScripts: boolean, scripts: object, pathFile: string): Promise<any> {
-  }
+  public async writeInJson(key: string, pathFile: string, obj: object, clear = false) { }
 }

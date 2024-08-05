@@ -1,50 +1,19 @@
 import fs from "fs/promises";
-import { dependencies } from "../interfaces";
 
-// Acabei não usando isso agora, mas devo mudar a lógica para utilizar esse aqui mesmo
 export default class Dependencies {
-  public async readFile(
-    packagePath: string
-  ): Promise<dependencies.PackageBase> {
+  public async readFile(packagePath: string): Promise<any> {
     const data = await fs.readFile(packagePath);
     const json = await JSON.parse(data.toString());
     return json;
   }
 
-  public async addDependency(
-    isDevDep: boolean,
-    newDep: dependencies.dependencies,
-    pathFile: string
-  ): Promise<any> {
+  public async writeInJson(key: string, pathFile: string, obj: object, clear = false) {
     const data = await this.readFile(pathFile);
-    if (isDevDep) {
-      data.devDependencies = {
-        ...data.devDependencies,
-        ...newDep
-      }
+    if (clear) {
+      data[key] = obj
     } else {
-      data.dependencies = {
-        ...data.dependencies,
-        ...newDep
-      }
+      data[key] = { ...data[key], ...obj }
     }
     await fs.writeFile(pathFile, JSON.stringify(data));
-    return data;
-  }
-
-  public async setScripts(clearScripts: boolean, scripts: object, pathFile: string) {
-    const data = await this.readFile(pathFile);
-    if (clearScripts) {
-      data.scripts = {
-        ...scripts
-      }
-    } else {
-      data.scripts = {
-        ...data.scripts,
-        ...scripts
-      }
-    }
-    await fs.writeFile(pathFile, JSON.stringify(data));
-    return data;
   }
 }

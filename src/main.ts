@@ -30,14 +30,20 @@ class main {
   protected async start() {
     try {
 
+      // PROMPTS
+
+
+      // EXECUTAR
+
+
       // Criação do diretório do projeto
-      await this.defineProj();
+      // await this.defineProj();
 
-      // Configurações de usuário + cópia dos arquivos
-      this._options.framework = await this.prompts.framework();
+      // // Configurações de usuário + cópia dos arquivos
+      // this._options.framework = await this.prompts.framework();
 
-      // Copia o arquivo base
-      await this.copyBaseTemplate();
+      // // Copia o arquivo base
+      // await this.copyBaseTemplate();
 
     } catch (err) {
       console.log(err)
