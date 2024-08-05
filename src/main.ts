@@ -14,7 +14,7 @@ class main {
   private _projectPath = "";
   private _templatePath = path.join(__dirname, "templates");
   private _options: prompts.OptionsProject = {
-    framework: { path: "", type: "Default" },
+    framework: { path: "", type: "React" },
     style: "Default",
     manager: "Default",
   };
@@ -31,6 +31,7 @@ class main {
     try {
 
       // PROMPTS
+
 
 
       // EXECUTAR
@@ -180,4 +181,8 @@ const FS = new FsFunctions();
 const PMP = new Prompts();
 const DEP = new Dependencies();
 
-new main(PMP, FS, DEP);
+try {
+  new main(PMP, FS, DEP);
+} catch (err) {
+  console.error(err);
+}

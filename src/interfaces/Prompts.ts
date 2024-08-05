@@ -1,6 +1,7 @@
-export type frameworks = { type: "React" | "Default" | "WebPack"; path: string };
+export type frameworks = { type: "React" | "WebPack", path: string };
 export type styles = "Tailwind" | "Styled-Components" | "Default";
 export type stateManager = "Context-API" | "Redux" | "Default";
+export type projectTypes = "frontend" | "backend" | "terminal"
 
 export interface OptionsProject {
   framework: frameworks;
@@ -8,28 +9,13 @@ export interface OptionsProject {
   manager: stateManager;
 }
 
-export abstract class AbstractPrompts {
-  projectName(): Promise<string> {
-    return new Promise((resolve, _reject) => {
-      resolve("project-uol-compass".trim());
-    });
-  }
-  framework(): Promise<frameworks> {
-    return new Promise((resolve, _reject) => { });
-  }
-  style(): Promise<styles> {
-    return new Promise((resolve, _reject) => {
-      resolve("Tailwind");
-    });
-  }
+export interface AbstractPrompts {
+  projectName(): Promise<string>
+  projectType(): Promise<projectTypes>
 
-  manager(): Promise<stateManager> {
-    return new Promise((resolve, _reject) => {
-      resolve("Context-API");
-    });
-  }
+  backFrameworks(): Promise<any>
+  // Ou
+  frontFrameworks(): Promise<any>
 
-  npmInstall(): Promise<boolean> {
-    return new Promise(() => { });
-  }
+  npmInstall(): Promise<boolean>
 }
